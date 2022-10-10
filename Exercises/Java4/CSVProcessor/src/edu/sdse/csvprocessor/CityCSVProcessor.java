@@ -3,6 +3,8 @@ package edu.sdse.csvprocessor;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.List;
+import java.util.ArrayList;
 
 public class CityCSVProcessor {
 	
@@ -33,6 +35,31 @@ public class CityCSVProcessor {
 		}
 	}
 	
+	public void cityRecorder(File file) {
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+			List<CityRecordings> cityRecordings = new ArrayList<CityRecordings>();
+			String line = "";
+			String DELIM = ",";
+			br.readLine();
+			while ((line = br.readLine()) != null) {
+				String[] cityRecording = line.split(DELIM);
+				
+				if (cityRecording.length > 0) {
+					CityRecordings recording = new CityRecordings(Integer.parseInt(cityRecording[0]), Integer.parseInt(cityRecording[1]), cityRecording[2], Integer.parseInt(cityRecording[3]));
+					cityRecordings.add(recording);
+				}
+			}
+			
+			for (CityRecordings recording : cityRecordings) {
+				System.out.println(cityRecordings.toString());
+			}
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private String cleanRawValue(String rawValue) {
 		return rawValue.trim();
 	}
@@ -59,5 +86,6 @@ public class CityCSVProcessor {
 		File csvFile = new File(dataDirectory, "Cities.csv");
 		
 		reader.readAndProcess(csvFile);
+		reader.cityRecorder(csvFile);
 	}
 }
